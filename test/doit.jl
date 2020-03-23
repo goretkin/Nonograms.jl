@@ -104,18 +104,28 @@ function make_string(image)
 end
 
 margins = [row_margins, column_margins]
-while true
-  for dim = 1:2
-    for i = 1:size(image, dim)
-      @show i dim
-      println(make_string(image))
-      println
-      evidence = image[row_or_column(dim, i)...]
-      post = sequence_infer(margins[dim][i], evidence)
-      image[row_or_column(dim, i)...] .= post
+
+function solve_nonogram!(image, margins)
+  for i_pass = 1:prod(size(image))
+    for dim = 1:2
+      for i = 1:size(image, dim)
+        if sum(ismissing.(image[row_or_column(dim, i)...])) == 0
+          continue  # this sequence is already specified!
+        end
+        @show sum(ismissing.(image))
+        @show i_pass i dim
+        println(make_string(image))
+        evidence = image[row_or_column(dim, i)...]
+        post = sequence_infer(margins[dim][i], evidence)
+        image[row_or_column(dim, i)...] .= post
+
+        if sum(ismissing.(image)) == 0
+          return
+        end
+      end
     end
   end
+  nothing
 end
 
-
-println(s)
+solve_nonogram!(image, margins)
