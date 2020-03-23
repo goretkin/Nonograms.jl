@@ -50,7 +50,6 @@ function _trival(absolute_0, absolute_1)
     error("inconsistent")
 end
 
-get_absolute(l, possibilities) = _trival(_get_absolute(l, possibilities))
 
 function ndnotation(v)
     if isequal(v, false)
