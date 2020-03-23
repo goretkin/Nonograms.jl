@@ -13,10 +13,16 @@ Nonograms.ndnotation.(Nonograms._trival.(r...))
 
 e = Union{Missing, Nothing, Bool}[missing for _ in 1:20]
 
-function sequence_infer(margin, evidence; do_mask)
+function sequence_infer(margin, evidence)
   n = length(evidence)
   s = sum(margin)
   p = Union{Missing, Nothing, Bool}[missing for _ in 1:n]
+
+  n_missing = mapreduce(ismissing, +, evidence)
+  if n_missing == 0
+    return evidence
+  end
+  do_mask = n_missing < n
   if do_mask
     search_mask = ismissing.(evidence)
     l = sum(search_mask)
@@ -127,14 +133,11 @@ function solve_nonogram!(image, margins)
   for i_pass = 1:prod(size(image))
     for dim = 1:2
       for i = 1:size(image, dim)
-        if sum(ismissing.(image[row_or_column(dim, i)...])) == 0
-          continue  # this sequence is already specified!
-        end
         @show sum(ismissing.(image))
         @show i_pass i dim
         println(make_string(image))
         evidence = image[row_or_column(dim, i)...]
-        post = sequence_infer(margins[dim][i], evidence; do_mask=i_pass > 2)
+        post = sequence_infer(margins[dim][i], evidence)
         image[row_or_column(dim, i)...] .= post
 
         if sum(ismissing.(image)) == 0
@@ -147,4 +150,5 @@ function solve_nonogram!(image, margins)
 end
 
 solve_nonogram!(image, margins)
+println("\n\nresult:")
 println(make_string(image))
