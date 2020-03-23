@@ -1,0 +1,7 @@
+name = "Nonograms"
+uuid = "f4315516-e1f0-4fe1-8b74-de4768144fd6"
+authors = ["Gustavo Goretkin <gustavo.goretkin@gmail.com>"]
+version = "0.1.0"
+
+[compat]
+julia = "1.3"
