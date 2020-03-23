@@ -13,14 +13,32 @@ Nonograms.ndnotation.(Nonograms._trival.(r...))
 
 e = Union{Missing, Nothing, Bool}[missing for _ in 1:20]
 
-function sequence_infer(margin, evidence)
+function sequence_infer(margin, evidence; do_mask)
   n = length(evidence)
   s = sum(margin)
   p = Union{Missing, Nothing, Bool}[missing for _ in 1:n]
-  for i in 0:(2^n-1)
-    a = digits(i, base=2, pad=n)
-    if sum(a) != s
+  if do_mask
+    search_mask = ismissing.(evidence)
+    l = sum(search_mask)
+    a = copy(evidence)
+    s_confirmed = sum(isequal.(true, evidence))
+  else
+    l = n
+  end
+
+  for i in 0:(2^l-1)
+    _a = digits(i, base=2, pad=l)
+    if do_mask && sum(_a) + s_confirmed != s
       continue # just an optimization
+    end
+    if !do_mask && sum(_a) != s
+      continue # just an optimization
+    end
+    if do_mask
+      copy!(a, evidence)
+      a[search_mask] .= _a
+    else
+      a = _a
     end
     if Nonograms.get_margin_clue(a) == margin # consistent with margin
       if !any(combine.(evidence, a) .=== nothing)  # consistent with work so far
@@ -116,7 +134,7 @@ function solve_nonogram!(image, margins)
         @show i_pass i dim
         println(make_string(image))
         evidence = image[row_or_column(dim, i)...]
-        post = sequence_infer(margins[dim][i], evidence)
+        post = sequence_infer(margins[dim][i], evidence; do_mask=i_pass > 2)
         image[row_or_column(dim, i)...] .= post
 
         if sum(ismissing.(image)) == 0
@@ -129,3 +147,4 @@ function solve_nonogram!(image, margins)
 end
 
 solve_nonogram!(image, margins)
+println(make_string(image))
