@@ -24,32 +24,6 @@ function get_margin_clue(a)
 end
 
 
-function _get_absolute(l, possibilities)
-    absolute_1 = ones(Int, l)
-    absolute_0 = zeros(Int, l)
-    for p in possibilities
-        absolute_1 .= absolute_1 .& p   # if ever false, always false
-        absolute_0 .= absolute_0 .| p   # if ever true, always true
-    end
-
-    return (absolute_0, absolute_1)
-end
-
-
-function _trival(absolute_0, absolute_1)
-    if absolute_0 == false
-        return false
-    end
-    if absolute_1 == true
-        return true
-    end
-    if absolute_1 == false && absolute_0 == true
-        return missing
-    end
-    error("inconsistent")
-end
-
-
 function ndnotation(v)
     if isequal(v, false)
         return "×"
