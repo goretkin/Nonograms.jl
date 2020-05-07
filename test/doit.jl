@@ -37,6 +37,12 @@ function sequence_infer(margin, evidence)
     if Nonograms.get_margin_clue(a) == margin # consistent with margin
       if !any(combine.(evidence, a) .=== nothing)  # consistent with work so far
         p .= combine.(p, a)
+        #=
+        if 0 == sum(ismissing.(p))
+          # all positions assigned or have contradiction (`nothing`)
+          break
+        end
+        =#
       end
     end
   end
