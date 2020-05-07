@@ -1,3 +1,5 @@
+# The instance in Nancy Drew has some cells pre-filled, but it turns out that the puzzle has a unique solution with just the margins.
+
 row_margins = [
 [2,2,4,3,1,2,2],
 [2,3,2,4,1,3,1],
