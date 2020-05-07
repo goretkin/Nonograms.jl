@@ -1,18 +1,6 @@
 import Nonograms
 import Nonograms: ndnotation, get_margin_clue, combine
 
-Nonograms.run_length_encode([0,0,1,0,0,0])
-
-r = Nonograms._get_absolute(4, [
-  [0,0,1,1],
-  [1,0,0,1],
-])
-
-Nonograms.ndnotation.(Nonograms._trival.(r...))
-
-
-e = Union{Missing, Nothing, Bool}[missing for _ in 1:20]
-
 function sequence_infer(margin, evidence)
   n = length(evidence)
   s = sum(margin)
@@ -55,58 +43,6 @@ function sequence_infer(margin, evidence)
   p[p .=== nothing] .= missing
   return p
 end
-
-row_margins = [
-[4, 3, 6, 1],
-[5, 2, 3, 1],
-[1, 3, 3, 2, 3],
-[1, 3, 1, 2, 1],
-[1, 2, 1, 1, 1],
-
-[1, 2, 1, 3, 2, 2],
-[1, 1, 2, 7],
-[1, 2, 1, 2, 1, 1],
-[1, 1, 2, 3, 1, 1, 1],
-[1, 1, 3, 3, 1, 2, 1],
-
-[1, 1, 1, 1, 3, 1, 1, 1],
-[1, 1, 2, 3, 3, 1, 1],
-[1, 2, 2, 2, 3, 2],
-[1, 1, 3, 1, 5],
-[1, 2, 2, 2, 2, 1],
-
-[1, 1, 2, 1, 1, 2, 1],
-[1, 1, 2, 1, 2, 1, 2, 1],
-[1, 2, 1, 3, 1, 1],
-[1, 2, 2, 2, 1],
-[1, 1, 2, 2, 2, 2]
-]
-
-column_margins = [
-[5],
-[7, 4],
-[2, 6, 3],
-[6 ,2, 2],
-[11, 1],
-
-[3, 3, 6],
-[1, 3, 11],
-[1, 2, 3, 3, 1],
-[3, 2, 2, 5],
-[2, 1, 7, 2],
-
-[1, 4, 1, 1],
-[1, 2, 2, 4],
-[1, 2, 1, 2, 1],
-[1, 3, 3, 1],
-[2, 9, 1, 1],
-
-[3, 1, 4, 2],
-[3, 4, 6],
-[5, 4, 2],
-[2, 4, 1, 1],
-[3, 6]
-]
 
 image = convert(Matrix{Union{Missing, Bool}}, fill(missing, length(row_margins), length(column_margins)))
 

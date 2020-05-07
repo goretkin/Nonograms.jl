@@ -1,9 +1,5 @@
 module Nonograms
 
-# Write your package code here.
-
-# TODO make a type for trivalent logic, yes, no, don't know
-
 function run_length_encode(input)
     output = Tuple{eltype(input), Int}[]
     for e in input
